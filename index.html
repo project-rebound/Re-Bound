@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title><strong>Re-Bound</strong> | Give Pages a Second Life</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #050816;
+      color: #f8fafc;
+      line-height: 1.6;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.8rem 1.5rem;
+      background: rgba(5, 8, 22, 0.9);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(148, 163, 184, 0.25);
+    }
+
+    .logo {
+      font-weight: 800;
+      font-size: 1.4rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #facc15;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 1.2rem;
+      align-items: center;
+      font-size: 0.95rem;
+    }
+
+    .nav-links a {
+      position: relative;
+      padding-bottom: 0.2rem;
+      color: #e5e7eb;
+      opacity: 0.9;
+    }
+
+    .nav-links a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      height: 2px;
+      width: 0;
+      background: linear-gradient(90deg, #22c55e, #facc15);
+      transition: width 0.25s ease;
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    .nav-cta {
+      padding: 0.4rem 0.9rem;
+      border-radius: 999px;
+      border: 1px solid #22c55e;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      cursor: pointer;
+      background: transparent;
+      color: #bbf7d0;
+    }
+
+    section {
+      padding: 4rem 1.5rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    #hero {
+      min-height: calc(100vh - 60px);
+      display: grid;
+      grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+      gap: 2rem;
+      align-items: center;
+    }
+
+    @media (max-width: 900px) {
+      #hero {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .hero-title {
+      font-size: clamp(2.2rem, 4vw, 3rem);
+      font-weight: 800;
+      margin-bottom: 1rem;
+    }
+
+    .hero-title span {
+      background: linear-gradient(90deg, #22c55e, #facc15);
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+
+    .hero-subtitle {
+      font-size: 1.05rem;
+      max-width: 28rem;
+      margin-bottom: 1.5rem;
+      color: #e5e7eb;
+    }
+
+    .hero-highlight {
+      display: inline-block;
+      padding: 0.35rem 0.75rem;
+      border-radius: 999px;
+      background: rgba(250, 204, 21, 0.15);
+      color: #facc15;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.8rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-top: 0.5rem;
+      justify-content: center;
+    }
+
+    .btn-primary {
+      padding: 0.8rem 1.6rem;
+      border-radius: 999px;
+      border: none;
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      color: #022c22;
+      font-weight: 700;
+      cursor: pointer;
+      font-size: 0.95rem;
+    }
+
+    .hero-side {
+      border-radius: 1.5rem;
+      padding: 1.25rem;
+      background: radial-gradient(circle at top left, rgba(34, 197, 94, 0.2), transparent 55%),
+                  radial-gradient(circle at bottom right, rgba(250, 204, 21, 0.18), transparent 55%),
+                  #020617;
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .hero-stat-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.8rem;
+      font-size: 0.9rem;
+    }
+
+    .stat-card {
+      padding: 0.85rem;
+      border-radius: 1rem;
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(51, 65, 85, 0.8);
+    }
+
+    .stat-number {
+      font-weight: 800;
+      font-size: 1.1rem;
+      color: #bbf7d0;
+    }
+
+    .stat-label {
+      font-size: 0.8rem;
+      color: #cbd5f5;
+    }
+
+    .section-eyebrow {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: #a5b4fc;
+      margin-bottom: 0.4rem;
+    }
+
+    .section-title {
+      font-size: 1.6rem;
+      font-weight: 700;
+      margin-bottom: 0.75rem;
+    }
+
+    .section-lead {
+      max-width: 40rem;
+      color: #e5e7eb;
+      font-size: 0.98rem;
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    @media (max-width: 900px) {
+      .about-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .about-card {
+      border-radius: 1.25rem;
+      padding: 1.25rem;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(51, 65, 85, 0.8);
+      font-size: 0.95rem;
+      color: #e5e7eb;
+    }
+
+    .about-card h3 {
+      font-size: 1rem;
+      margin-bottom: 0.5rem;
+      color: #facc15;
+    }
+
+    .about-list {
+      margin-top: 0.5rem;
+      padding-left: 1rem;
+      font-size: 0.9rem;
+    }
+
+    .about-list li {
+      margin-bottom: 0.3rem;
+    }
+
+    #impact {
+      text-align: left;
+    }
+
+    .counters-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1.2rem;
+      margin-top: 2rem;
+    }
+
+    .impact-card {
+      padding: 1.2rem;
+      border-radius: 1.25rem;
+      background: radial-gradient(circle at top, rgba(34, 197, 94, 0.18), transparent 60%),
+                  rgba(15, 23, 42, 0.95);
+      border: 1px solid rgba(22, 163, 74, 0.35);
+      text-align: left;
+    }
+
+    .impact-number {
+      font-size: 1.6rem;
+      font-weight: 800;
+      margin-bottom: 0.2rem;
+      color: #bbf7d0;
+    }
+
+    .impact-label {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: #9ca3af;
+      margin-bottom: 0.4rem;
+    }
+
+    .impact-note {
+      font-size: 0.85rem;
+      color: #e5e7eb;
+    }
+
+    #team {
+      text-align: left;
+    }
+
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .team-card {
+      perspective: 1000px;
+    }
+
+    .team-inner {
+      position: relative;
+      width: 100%;
+      height: 300px;
+      transform-style: preserve-3d;
+      transition: transform 0.6s;
+      cursor: pointer;
+    }
+
+    .team-card:hover .team-inner {
+      transform: rotateY(180deg);
+    }
+
+    .team-card.flipped .team-inner {
+      transform: rotateY(180deg);
+    }
+
+
+    .team-face {
+      position: absolute;
+      inset: 0;
+      border-radius: 1.2rem;
+      padding: 1.2rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      background: rgba(15, 23, 42, 0.95);
+      border: 1px solid rgba(51, 65, 85, 0.9);
+      backface-visibility: hidden;
+    }
+
+    .team-back {
+      transform: rotateY(180deg);
+      background: radial-gradient(circle at top, rgba(250, 204, 21, 0.14), transparent 60%),
+                  rgba(15, 23, 42, 0.98);
+    }
+
+    .team-role {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: #a5b4fc;
+      margin-bottom: 0.2rem;
+    }
+
+    .team-name {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 0.4rem;
+    }
+
+    .team-tagline {
+      font-size: 0.9rem;
+      color: #e5e7eb;
+    }
+
+    .team-detail {
+      font-size: 0.85rem;
+      color: #e5e7eb;
+    }
+
+    .footer {
+      padding: 2rem 1.5rem 3rem;
+      max-width: 1100px;
+      margin: 0 auto;
+      border-top: 1px solid rgba(51, 65, 85, 0.7);
+      font-size: 0.8rem;
+      color: #9ca3af;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.8rem;
+    }
+
+    .footer-left,
+    .footer-center,
+    .footer-right {
+      flex: 1;
+    }
+
+    .footer-left {
+      text-align: left;
+    }
+
+    .footer-center {
+      text-align: center;
+    }
+
+    .footer-right {
+      text-align: right;
+    }
+
+    .popup-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.7);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 2000;
+      backdrop-filter: blur(6px);
+    }
+
+    .popup {
+      background: radial-gradient(circle at top, rgba(34, 197, 94, 0.18), transparent 60%),
+                  rgba(15, 23, 42, 0.98);
+      padding: 1.8rem 1.6rem;
+      border-radius: 1.4rem;
+      max-width: 480px;
+      width: 90%;
+      border: 1px solid rgba(34, 197, 94, 0.4);
+      position: relative;
+    }
+
+    .popup h2 {
+      margin-bottom: 0.5rem;
+      font-size: 1.3rem;
+    }
+
+    .popup p {
+      font-size: 0.9rem;
+      color: #e5e7eb;
+      margin-bottom: 0.75rem;
+    }
+
+    .popup-close {
+      position: absolute;
+      top: 0.7rem;
+      right: 0.9rem;
+      background: transparent;
+      border: none;
+      color: #9ca3af;
+      font-size: 1.2rem;
+      cursor: pointer;
+    }
+
+    .popup form {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      margin-top: 0.5rem;
+    }
+
+    .popup input,
+    .popup select {
+      padding: 0.7rem;
+      border-radius: 0.8rem;
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      background: rgba(15, 23, 42, 0.8);
+      color: #f9fafb;
+      font-size: 0.9rem;
+      outline: none;
+    }
+
+    .popup input::placeholder {
+      color: #6b7280;
+    }
+
+    .popup button[type="submit"] {
+      margin-top: 0.3rem;
+      padding: 0.8rem;
+      border-radius: 999px;
+      border: none;
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      font-weight: 700;
+      color: #022c22;
+      cursor: pointer;
+      font-size: 0.95rem;
+    }
+
+    .popup-hint {
+      font-size: 0.75rem;
+      color: #9ca3af;
+      margin-top: 0.3rem;
+    }
+
+    .popup-label {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: #9ca3af;
+      margin-top: 0.5rem;
+    }
+
+    .popup-choice-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .choice-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      padding: 0.4rem 0.7rem;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      font-size: 0.8rem;
+      cursor: pointer;
+    }
+
+    .choice-pill input[type="checkbox"] {
+      accent-color: #22c55e;
+      cursor: pointer;
+    }
+
+    #backToTop {
+      position: fixed;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      padding: 0.6rem 0.8rem;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      background: rgba(15, 23, 42, 0.85);
+      color: #e5e7eb;
+      font-size: 1rem;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.7);
+      display: none;
+      z-index: 3000;
+    }
+
+    @media (max-width: 640px) {
+      .navbar {
+        flex-wrap: wrap;
+        gap: 0.6rem;
+      }
+      .nav-links {
+        flex-wrap: wrap;
+        justify-content: flex-end;
+      }
+
+      .hero-side {
+        order: 2;
+      }
+
+      .footer {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 0.4rem;
+      }
+      .footer-left,
+      .footer-center,
+      .footer-right {
+        flex: none;
+        text-align: center;
+      }
+
+      #backToTop {
+        bottom: 1rem;
+        right: 1rem;
+        padding: 0.5rem 0.7rem;
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="navbar">
+    <div class="logo">Re-Bound</div>
+    <nav class="nav-links">
+      <a href="#about">About</a>
+      <a href="#impact">Impact</a>
+      <a href="#team">Team</a>
+      <button class="nav-cta" onclick="document.getElementById('popupOverlayCentre').style.display='flex'">
+        Get Involved
+      </button>
+    </nav>
+  </header>
+
+  <section id="hero">
+    <div>
+      <div class="hero-highlight">Every unused page can change a story</div>
+      <h1 class="hero-title">
+        Give your <span>notebook pages</span> a second life.
+      </h1>
+      <p class="hero-subtitle">
+        Join our mission to collect unused notebook pages and rebind them for children in need.
+        What feels like “leftover” to you can become someone’s very first notebook.
+      </p>
+      <div class="hero-actions">
+        <button
+          class="btn-primary"
+          onclick="document.getElementById('popupOverlayJoin').style.display='flex'">
+          Count me in
+        </button>
+      </div>
+      <div style="margin-top: 1.5rem; text-align: center; font-size: 0.85rem;">
+        <a href="#about" style="color: #a5b4fc; text-decoration: none;">Learn how <strong>Re-Bound</strong> works ↓</a>
+      </div>
+    </div>
+
+    <aside class="hero-side">
+      <h3 style="font-size:0.95rem; text-transform:uppercase; letter-spacing:0.14em; color:#a5b4fc; margin-bottom:0.4rem;">
+        Snapshot of our journey
+      </h3>
+      <p style="font-size:0.9rem; color:#e5e7eb; margin-bottom:0.9rem;">
+        <strong>Re-Bound</strong> is a student-led initiative that upcycles unused notebook pages into hand-bound books,
+        supporting learners in communities where educational resources are stretched thin.
+      </p>
+      <div class="hero-stat-grid">
+        <div class="stat-card">
+          <div class="stat-number">15+</div>
+          <div class="stat-label">Notebooks <strong>Re-Bound</strong></div>
+          <p style="font-size:0.78rem; margin-top:0.3rem;">Each one made from pages that might have been thrown away.</p>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">4</div>
+          <div class="stat-label">Partner Schools</div>
+          <p style="font-size:0.78rem; margin-top:0.3rem;">Starting with Sri Kumaran Children’s Home campuses.</p>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">1K+</div>
+          <div class="stat-label">Pages Saved</div>
+          <p style="font-size:0.78rem; margin-top:0.3rem;">Diverted from waste and given a new purpose.</p>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">10+</div>
+          <div class="stat-label">Student Volunteers</div>
+          <p style="font-size:0.78rem; margin-top:0.3rem;">Sorting, stitching, and spreading the word.</p>
+        </div>
+      </div>
+    </aside>
+  </section>
+
+  <section id="about">
+    <div class="section-eyebrow">About <strong>Re-Bound</strong></div>
+    <h2 class="section-title">From “extra pages” to powerful beginnings.</h2>
+    <p class="section-lead">
+      Every academic year ends with half-used notebooks. <strong>Re-Bound</strong> collects those unused pages,
+      carefully sorts and binds them into fresh notebooks, and distributes them to children who
+      need them the most. It’s simple, sustainable, and powered by students, families, and communities.
+    </p>
+
+    <div class="about-grid">
+      <div class="about-card">
+        <h3>How it works</h3>
+        <ol class="about-list">
+          <li><strong>Collect:</strong> Students, families, and offices drop their gently used notebooks at <strong>Re-Bound</strong> collection points.</li>
+          <li><strong>Sort:</strong> Volunteers separate blank pages and remove torn or scribbled sheets.</li>
+          <li><strong>Rebind:</strong> Pages are trimmed, grouped, and bound into sturdy, usable notebooks.</li>
+          <li><strong>Distribute:</strong> Partner NGOs, schools, and groups help us deliver them to children in need.</li>
+        </ol>
+      </div>
+      <div class="about-card">
+        <h3>Why this matters</h3>
+        <ul class="about-list">
+          <li>Reduces paper waste by turning “leftover” into “essential”.</li>
+          <li>Makes quality notebooks accessible to students who can’t always afford them.</li>
+          <li>Helps schools, homes, and workplaces build a culture of sustainability and empathy.</li>
+          <li>Shows how small, consistent actions can create measurable impact.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="impact">
+    <div class="section-eyebrow">Impact</div>
+    <h2 class="section-title">Every notebook we rebind is one more child prepared to learn.</h2>
+    <p class="section-lead">
+      We track every page we save and every notebook we share so that students and volunteers can see the real-world
+      outcome of their contribution. These numbers are growing with every collection drive.
+    </p>
+
+    <div class="counters-grid">
+      <div class="impact-card">
+        <div class="impact-number">15+</div>
+        <div class="impact-label">Notebooks created</div>
+        <div class="impact-note">
+          Carefully checked and bound to meet classroom needs for an entire term.
+        </div>
+      </div>
+      <div class="impact-card">
+        <div class="impact-number">1K+</div>
+        <div class="impact-label">Pages recovered</div>
+        <div class="impact-note">
+          Pages that escaped the trash and turned into notes, diagrams, and ideas.
+        </div>
+      </div>
+      <div class="impact-card">
+        <div class="impact-number">10+</div>
+        <div class="impact-label">Children reached</div>
+        <div class="impact-note">
+          Learners reached through <strong>Re-Bound</strong>’s student-powered collection, rebinding, and distribution network.
+        </div>
+      </div>
+      <div class="impact-card">
+        <div class="impact-number">10+</div>
+        <div class="impact-label">Volunteers</div>
+        <div class="impact-note">
+          Across schools, homes, and workplaces - with more being added.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="team">
+    <div class="section-eyebrow">Team</div>
+    <h2 class="section-title">Student-led, thoughtfully mentored.</h2>
+    <p class="section-lead">
+      <strong>Re-Bound</strong> is run by students and a parent mentor who believe that sustainable change can start in the pages of a notebook.
+    </p>
+
+    <div class="team-grid">
+      <div class="team-card">
+        <div class="team-inner">
+          <div class="team-face">
+            <div class="team-role">Founder</div>
+            <div class="team-name">Atharv Kodalapur</div>
+            <div class="team-tagline">
+              A Class 7 student rewriting the idea of waste-by turning unused notebook pages into pathways to education.
+            </div>
+          </div>
+          <div class="team-face team-back">
+            <div class="team-detail">
+              Atharv founded <strong>Re-Bound</strong> with a simple mission: to make sure children like him never run out of pages to learn on.
+              Gentle, compassionate, and shaped by the unconditional love of his pets, he carries kindness as his compass.
+              A flautist in the making, an amateur photographer, a theatre enthusiast, and now a determined young changemaker,
+              Atharv believes that the world can be rebuilt through everyday acts of kindness-and he’s starting with one notebook at a time.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="team-card">
+        <div class="team-inner">
+          <div class="team-face">
+            <div class="team-role">Parent Mentor</div>
+            <div class="team-name">Gowri Vishwanath</div>
+            <div class="team-tagline">
+              Operations, Technology and a quiet strength behind <strong>Re-Bound</strong>.
+            </div>
+          </div>
+          <div class="team-face team-back">
+            <div class="team-detail">
+              A corporate professional and a steady mentor behind the initiative, she brings structure, clarity, and everyday guidance to <strong>Re-Bound</strong>.
+              She lives by the belief that ‘you give and you get,’ and that generosity and kindness don’t take you away from your dreams-they bring you closer to them.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="team-card">
+        <div class="team-inner">
+          <div class="team-face">
+            <div class="team-role">Students & Volunteers</div>
+            <div class="team-name"><strong>Re-Bound</strong> Community</div>
+            <div class="team-tagline">
+              Students, families, and partners who keep the pages moving.
+            </div>
+          </div>
+          <div class="team-face team-back">
+            <div class="team-detail">
+              A growing community of student volunteers, families, and partner institutions - with heartfelt gratitude to Sri Kumaran Children’s Home for being the first to believe in and support the initiative - along with corporates and homes that collect notebooks, sort pages, help with binding, and join distribution visits. Together, they turn a simple idea into real notebooks in real children’s hands.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="footer-left">© 2025 <strong>Re-Bound</strong>. All rights reserved.</div>
+    <div class="footer-center">Student-led initiative to reimagine unused notebook pages.</div>
+    <div class="footer-right">Made with ❤️ for children in need.</div>
+  </footer>
+
+  <button id="backToTop" aria-label="Back to top">↑</button>
+
+  <!-- Join popup -->
+  <div class="popup-overlay" id="popupOverlayJoin">
+    <div class="popup">
+      <button class="popup-close" onclick="document.getElementById('popupOverlayJoin').style.display='none'" aria-label="Close popup">&times;</button>
+      <span class="pill">Volunteer / Donate Pages</span>
+      <h2>Join the <strong>Re-Bound</strong> mission</h2>
+      <p>
+        Share your details, tell us how you’d like to help, and choose your collection centre.
+        We’ll get in touch with simple steps to start contributing pages or volunteering.
+      </p>
+
+      <form id="reboundForm">
+        <input type="text" name="name" placeholder="Your Name" required />
+        <input type="tel" name="phone" placeholder="Phone Number" required />
+
+        <label class="popup-label">I’d like to (select all that apply):</label>
+        <div class="popup-choice-row">
+          <label class="choice-pill">
+            <input type="checkbox" name="interestChoice" value="Donate unused pages" />
+            Donate unused pages
+          </label>
+          <label class="choice-pill">
+            <input type="checkbox" name="interestChoice" value="Volunteer (collect, bind, distribute)" />
+            Volunteer (collect, bind, distribute)
+          </label>
+          <label class="choice-pill">
+            <input type="checkbox" name="interestChoice" value="Host a <strong>Re-Bound</strong> collection point" />
+            Host a <strong>Re-Bound</strong> collection point
+          </label>
+        </div>
+
+        <label class="popup-label">Collection Center</label>
+        <select name="collectionCenter" required>
+          <option value="">Select Collection Center</option>
+          <option value="Sri Kumaran Children's Home - ICSE">
+            Sri Kumaran Children's Home - ICSE
+          </option>
+          <option value="Sri Kumaran Children's Home - CBSE">
+            Sri Kumaran Children's Home - CBSE
+          </option>
+          <option value="Sri Kumaran Children's Home - DKS">
+            Sri Kumaran Children's Home - DKS
+          </option>
+          <option value="Sri Kumaran Children's Home - TSF">
+            Sri Kumaran Children's Home - TSF
+          </option>
+        </select>
+
+        <button type="submit">Submit</button>
+        <div class="popup-hint">
+          Your details are used only to coordinate collections and volunteering.
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Get involved popup -->
+  <div class="popup-overlay" id="popupOverlayCentre">
+    <div class="popup">
+      <button class="popup-close" onclick="document.getElementById('popupOverlayCentre').style.display='none'" aria-label="Close popup">&times;</button>
+      <span class="pill">For schools, corporates & homes</span>
+      <h2>Host a <strong>Re-Bound</strong> collection point</h2>
+      <p>
+        <strong>Re-Bound</strong> collection points can live in schools, corporate offices, apartment communities,
+        volunteer homes - anywhere people use notebooks and want to give their unused pages a second life.
+      </p>
+      <p><strong>Here’s the simple starter kit:</strong></p>
+      <ul class="about-list">
+        <li><strong>1. Choose a visible spot</strong> – reception, lobby, corridor, staff room, or community hall.</li>
+        <li><strong>2. Place a labelled box</strong> for people to drop their half-used notebooks or unused pages.</li>
+        <li><strong>3. Nominate a <strong>Re-Bound</strong> volunteer</strong> to keep an eye on the box and share updates.</li>
+        <li><strong>4. Sort & bundle pages</strong> every few weeks so they are ready for binding.</li>
+        <li><strong>5. Coordinate with us</strong> so we can help with binding support or connect you to distribution partners.</li>
+      </ul>
+      <p>
+        When you’re ready, use the <strong>“Count me in”</strong> button to share your details
+        and mention that you’d like to <strong>host a collection point</strong>.
+      </p>
+    </div>
+  </div>
+
+  <script>
+    // Back to top
+    const backToTop = document.getElementById("backToTop");
+    window.addEventListener("scroll", () => {
+      backToTop.style.display = window.scrollY > 400 ? "block" : "none";
+    });
+    backToTop.addEventListener("click", () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+
+    // Form submit with explicit FormData
+    const form = document.getElementById("reboundForm");
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbwoji7yp7jgledr96aVMG7rKyVPAAdjlx89fuvlcWClnHOfvEHG511CimA-JODDIunS/exec";
+
+    if (form) {
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const name = form.name.value.trim();
+        const phone = form.phone.value.trim();
+        const collectionCenter = form.collectionCenter.value;
+
+        const choices = Array.from(
+          form.querySelectorAll('input[name="interestChoice"]:checked')
+        ).map(cb => cb.value);
+
+        if (!name) {
+          alert("Please enter your name.");
+          return;
+        }
+        if (!phone) {
+          alert("Please enter your phone number.");
+          return;
+        }
+        if (!choices.length) {
+          alert("Please select at least one way you'd like to help.");
+          return;
+        }
+        if (!collectionCenter) {
+          alert("Please select a collection center.");
+          return;
+        }
+
+        const interestType = choices.join(", ");
+
+        const formData = new FormData();
+        formData.append("name", name);
+        formData.append("phone", phone);
+        formData.append("collectionCenter", collectionCenter);
+        formData.append("interestType", interestType);
+        formData.append("timestamp", new Date().toISOString());
+
+        try {
+          await fetch(GAS_URL, {
+            method: "POST",
+            mode: "no-cors",
+            body: formData,
+          });
+
+          alert("Thank you! Your details have been submitted.");
+          form.reset();
+          document.getElementById('popupOverlayJoin').style.display = 'none';
+        } catch (err) {
+          console.error("Error sending to Google Apps Script:", err);
+          alert("There was a problem sending your details. Please try again in a bit.");
+        }
+      });
+    }
+  
+    // Enable click-to-flip for team cards (better on mobile)
+    document.querySelectorAll(".team-card").forEach((card) => {
+      card.addEventListener("click", () => {
+        card.classList.toggle("flipped");
+      });
+    });
+
+  </script>
+</body>
+</html>
