@@ -621,7 +621,7 @@
         <div class="stat-card">
           <div class="stat-number">4</div>
           <div class="stat-label">Partner Schools</div>
-          <p style="font-size:0.78rem; margin-top:0.3rem;">Starting with Sri Kumaran Children’s Home campuses.</p>
+          <p style="font-size:0.78rem; margin-top:0.3rem;">Starting with </p>
         </div>
         <div class="stat-card">
           <div class="stat-number">1K+</div>
@@ -765,8 +765,7 @@
           </div>
           <div class="team-face team-back">
             <div class="team-detail">
-              A growing community of student volunteers, families, and partner institutions - with heartfelt gratitude to Sri Kumaran Children’s Home for being the first to believe in and support the initiative - along with corporates and homes that collect notebooks, sort pages, help with binding, and join distribution visits. Together, they turn a simple idea into real notebooks in real children’s hands.
-            </div>
+              A growing community of student volunteers, families, and partner institutions - with heartfelt gratitude to </div>
           </div>
         </div>
       </div>
@@ -813,28 +812,13 @@
         </div>
 
         <label class="popup-label">Collection Center</label>
-        <select name="collectionCenter" id="collectionCenter" required>
+        <select name="collectionCenter" required>
           <option value="">Select Collection Center</option>
-          <option value="Sri Kumaran Children's Home - ICSE">
-            Sri Kumaran Children's Home - ICSE
-          </option>
-          <option value="Sri Kumaran Children's Home - CBSE">
-            Sri Kumaran Children's Home - CBSE
-          </option>
-          <option value="Sri Kumaran Children's Home - DKS">
-            Sri Kumaran Children's Home - DKS
-          </option>
-          <option value="Sri Kumaran Children's Home - TSF">
-            Sri Kumaran Children's Home - TSF
-          </option>
+          <option value="</option>
+          <option value="</option>
+          <option value="</option>
+          <option value="</option>
         </select>
-<input
-  type="text"
-  id="newCenterInput"
-  name="newCollectionCenter"
-  placeholder="Enter name & area of the collection center"
-  style="display:none; margin-top:0.6rem;"
-/>
 
         <button type="submit">Submit</button>
         <div class="popup-hint">
@@ -870,39 +854,6 @@
   </div>
 
   <script>
-    // ===== Dynamic Collection Centers =====
-    const collectionCenters = [
-      "Garadi Apartment, Basavanagudi"
-    ];
-
-    const centerSelect = document.getElementById("collectionCenter");
-    const newCenterInput = document.getElementById("newCenterInput");
-
-    if (centerSelect) {
-      collectionCenters.forEach(center => {
-        const option = document.createElement("option");
-        option.value = center;
-        option.textContent = center;
-        centerSelect.appendChild(option);
-      });
-
-      const requestOption = document.createElement("option");
-      requestOption.value = "__request_new__";
-      requestOption.textContent = "➕ Request a new collection center";
-      centerSelect.appendChild(requestOption);
-
-      centerSelect.addEventListener("change", () => {
-        if (centerSelect.value === "__request_new__") {
-          newCenterInput.style.display = "block";
-          newCenterInput.required = true;
-        } else {
-          newCenterInput.style.display = "none";
-          newCenterInput.required = false;
-          newCenterInput.value = "";
-        }
-      });
-    }
-
     // Back to top
     const backToTop = document.getElementById("backToTop");
     window.addEventListener("scroll", () => {
@@ -914,7 +865,7 @@
 
     // Form submit with explicit FormData
     const form = document.getElementById("reboundForm");
-    const GAS_URL = "https://script.google.com/macros/s/AKfycbwoji7yp7jgledr96aVMG7rKyVPAAdjlx89fuvlcWClnHOfvEHG511CimA-JODDIunS/exec";
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbwZNXTdK-8Qr7-3WwlqwBxdRVzTtwlC0gDmEd9AO9xgbI_CZvwLuktCagLEYXJZH9VT/exec";
 
     if (form) {
       form.addEventListener("submit", async (e) => {
@@ -922,14 +873,7 @@
 
         const name = form.name.value.trim();
         const phone = form.phone.value.trim();
-        let collectionCenter = form.collectionCenter.value;
-        if (collectionCenter === "__request_new__") {
-          collectionCenter = newCenterInput.value.trim();
-          if (!collectionCenter) {
-            alert("Please enter the name of the requested collection center.");
-            return;
-          }
-        }
+        const collectionCenter = form.collectionCenter.value;
 
         const choices = Array.from(
           form.querySelectorAll('input[name="interestChoice"]:checked')
