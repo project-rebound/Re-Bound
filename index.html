@@ -4,11 +4,44 @@
   <meta charset="UTF-8" />
   <title>Re-Bound | Give Pages a Second Life</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #050816;
+      color: #f8fafc;
+      padding: 1.5rem;
+    }
+    select, input, button {
+      width: 100%;
+      padding: 0.7rem;
+      margin-top: 0.6rem;
+      border-radius: 0.6rem;
+      border: none;
+    }
+    button {
+      background: #22c55e;
+      color: #022c22;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 1rem;
+    }
+    #formSuccessMessage {
+      display: none;
+      margin-top: 1rem;
+      padding: 0.75rem;
+      border-radius: 0.7rem;
+      background: rgba(34,197,94,0.15);
+      color: #bbf7d0;
+    }
+  </style>
 </head>
 <body>
 
+<h2>Join the Re-Bound Mission</h2>
+
 <form id="reboundForm">
   <label>Collection Center</label>
+
   <select name="collectionCenter" id="collectionCenter" required>
     <option value="">Select Collection Center</option>
   </select>
@@ -16,20 +49,20 @@
   <input
     type="text"
     id="newCenterInput"
-    name="newCollectionCenter"
     placeholder="Enter name & area of the collection center"
-    style="display:none; margin-top:0.6rem;"
+    style="display:none;"
   />
 
   <button type="submit">Submit</button>
 
-  <div id="formSuccessMessage" style="display:none; margin-top:0.8rem; padding:0.7rem; border-radius:0.8rem; background:#e6fffa; color:#065f46;">
-    Thank you! Your response has been received.
+  <div id="formSuccessMessage">
+    Thank you! Your response has been received. We’ll reach out shortly.
   </div>
 </form>
 
 <script>
-const GAS_URL = "https://script.google.com/macros/s/AKfycbzDu5o_EilirlyJjJvzOPaahbuVjXCsxLBXDXMGxjqpO-gdas6ExNWujUiUpTMUUqDe/exec";
+const GAS_URL =
+  "https://script.google.com/macros/s/AKfycbzDu5o_EilirlyJjJvzOPaahbuVjXCsxLBXDXMGxjqpO-gdas6ExNWujUiUpTMUUqDe/exec";
 
 document.addEventListener("DOMContentLoaded", () => {
   const select = document.getElementById("collectionCenter");
@@ -37,14 +70,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
   while (select.options.length > 1) select.remove(1);
 
-  select.add(new Option("Garadi Apartment, Basavanagudi", "Garadi Apartment, Basavanagudi"));
-  select.add(new Option("➕ Request a new collection center", "__request_new__"));
+  select.add(new Option(
+    "Garadi Apartment, Basavanagudi",
+    "Garadi Apartment, Basavanagudi"
+  ));
+  select.add(new Option(
+    "➕ Request a new collection center",
+    "__request_new__"
+  ));
 
   select.addEventListener("change", () => {
-    const show = select.value === "__request_new__";
-    input.style.display = show ? "block" : "none";
-    input.required = show;
-    if (!show) input.value = "";
+    const isRequest = select.value === "__request_new__";
+    input.style.display = isRequest ? "block" : "none";
+    input.required = isRequest;
+    if (!isRequest) input.value = "";
   });
 });
 
@@ -54,13 +93,20 @@ document.getElementById("reboundForm").addEventListener("submit", async (e) => {
   let center = collectionCenter.value;
   if (center === "__request_new__") {
     center = newCenterInput.value.trim();
-    if (!center) return alert("Please enter a collection center.");
+    if (!center) {
+      alert("Please enter the collection center name.");
+      return;
+    }
   }
 
-  const data = new FormData();
-  data.append("collectionCenter", center);
+  const formData = new FormData();
+  formData.append("collectionCenter", center);
 
-  await fetch(GAS_URL, { method: "POST", mode: "no-cors", body: data });
+  await fetch(GAS_URL, {
+    method: "POST",
+    mode: "no-cors",
+    body: formData
+  });
 
   document.getElementById("formSuccessMessage").style.display = "block";
 });
