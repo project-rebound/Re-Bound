@@ -813,7 +813,7 @@
         </div>
 
         <label class="popup-label">Collection Center</label>
-        <select name="collectionCenter" required>
+        <select name="collectionCenter" id="collectionCenter" required>
           <option value="">Select Collection Center</option>
           <option value="Sri Kumaran Children's Home - ICSE">
             Sri Kumaran Children's Home - ICSE
@@ -828,6 +828,13 @@
             Sri Kumaran Children's Home - TSF
           </option>
         </select>
+<input
+  type="text"
+  id="newCenterInput"
+  name="newCollectionCenter"
+  placeholder="Enter name & area of the collection center"
+  style="display:none; margin-top:0.6rem;"
+/>
 
         <button type="submit">Submit</button>
         <div class="popup-hint">
@@ -863,6 +870,39 @@
   </div>
 
   <script>
+    // ===== Dynamic Collection Centers =====
+    const collectionCenters = [
+      "Garadi Apartment, Basavanagudi"
+    ];
+
+    const centerSelect = document.getElementById("collectionCenter");
+    const newCenterInput = document.getElementById("newCenterInput");
+
+    if (centerSelect) {
+      collectionCenters.forEach(center => {
+        const option = document.createElement("option");
+        option.value = center;
+        option.textContent = center;
+        centerSelect.appendChild(option);
+      });
+
+      const requestOption = document.createElement("option");
+      requestOption.value = "__request_new__";
+      requestOption.textContent = "➕ Request a new collection center";
+      centerSelect.appendChild(requestOption);
+
+      centerSelect.addEventListener("change", () => {
+        if (centerSelect.value === "__request_new__") {
+          newCenterInput.style.display = "block";
+          newCenterInput.required = true;
+        } else {
+          newCenterInput.style.display = "none";
+          newCenterInput.required = false;
+          newCenterInput.value = "";
+        }
+      });
+    }
+
     // Back to top
     const backToTop = document.getElementById("backToTop");
     window.addEventListener("scroll", () => {
@@ -882,7 +922,14 @@
 
         const name = form.name.value.trim();
         const phone = form.phone.value.trim();
-        const collectionCenter = form.collectionCenter.value;
+        let collectionCenter = form.collectionCenter.value;
+        if (collectionCenter === "__request_new__") {
+          collectionCenter = newCenterInput.value.trim();
+          if (!collectionCenter) {
+            alert("Please enter the name of the requested collection center.");
+            return;
+          }
+        }
 
         const choices = Array.from(
           form.querySelectorAll('input[name="interestChoice"]:checked')
