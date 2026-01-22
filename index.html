@@ -619,11 +619,9 @@
           <p style="font-size:0.78rem; margin-top:0.3rem;">Each one made from pages that might have been thrown away.</p>
         </div>
         <div class="stat-card">
-          <div class="stat-number">4+</div>
-<div class="stat-label">Partners</div>
-<p style="font-size:0.78rem; margin-top:0.3rem;">
-Schools, homes, and community groups supporting the initiative.
-</p>
+          <div class="stat-number">4</div>
+          <div class="stat-label">Partner Schools</div>
+          <p style="font-size:0.78rem; margin-top:0.3rem;">Starting with Sri Kumaran Children’s Home campuses.</p>
         </div>
         <div class="stat-card">
           <div class="stat-number">1K+</div>
@@ -815,17 +813,21 @@ Schools, homes, and community groups supporting the initiative.
         </div>
 
         <label class="popup-label">Collection Center</label>
-<select name="collectionCenter" id="collectionCenter" required>
-  <option value="">Select Collection Center</option>
-</select>
-
-<input
-  type="text"
-  id="newCenterInput"
-  name="newCollectionCenter"
-  placeholder="Enter name & area of the collection center"
-  style="display:none; margin-top:0.6rem;"
-/>
+        <select name="collectionCenter" required>
+          <option value="">Select Collection Center</option>
+          <option value="Sri Kumaran Children's Home - ICSE">
+            Sri Kumaran Children's Home - ICSE
+          </option>
+          <option value="Sri Kumaran Children's Home - CBSE">
+            Sri Kumaran Children's Home - CBSE
+          </option>
+          <option value="Sri Kumaran Children's Home - DKS">
+            Sri Kumaran Children's Home - DKS
+          </option>
+          <option value="Sri Kumaran Children's Home - TSF">
+            Sri Kumaran Children's Home - TSF
+          </option>
+        </select>
 
         <button type="submit">Submit</button>
         <div class="popup-hint">
@@ -861,7 +863,7 @@ Schools, homes, and community groups supporting the initiative.
   </div>
 
   <script>
-    // ===== CLEAN Collection Center Logic =====
+    // ===== FINAL Collection Center Logic (ONLY SOURCE) =====
     const collectionCenters = [
       "Garadi Apartment, Basavanagudi"
     ];
@@ -870,26 +872,26 @@ Schools, homes, and community groups supporting the initiative.
     const newCenterInput = document.getElementById("newCenterInput");
 
     if (centerSelect) {
-      // Populate fixed centers
+      // Clear any existing options except placeholder
+      centerSelect.length = 1;
+
       collectionCenters.forEach(center => {
-        const option = document.createElement("option");
-        option.value = center;
-        option.textContent = center;
-        centerSelect.appendChild(option);
+        const opt = document.createElement("option");
+        opt.value = center;
+        opt.textContent = center;
+        centerSelect.appendChild(opt);
       });
 
-      // Add request-new option
-      const requestOption = document.createElement("option");
-      requestOption.value = "__request_new__";
-      requestOption.textContent = "➕ Request a new collection center";
-      centerSelect.appendChild(requestOption);
+      const req = document.createElement("option");
+      req.value = "__request_new__";
+      req.textContent = "➕ Request a new collection center";
+      centerSelect.appendChild(req);
 
-      // Toggle input field
       centerSelect.addEventListener("change", () => {
-        const isRequest = centerSelect.value === "__request_new__";
-        newCenterInput.style.display = isRequest ? "block" : "none";
-        newCenterInput.required = isRequest;
-        if (!isRequest) newCenterInput.value = "";
+        const show = centerSelect.value === "__request_new__";
+        newCenterInput.style.display = show ? "block" : "none";
+        newCenterInput.required = show;
+        if (!show) newCenterInput.value = "";
       });
     }
 
@@ -904,7 +906,7 @@ Schools, homes, and community groups supporting the initiative.
 
     // Form submit with explicit FormData
     const form = document.getElementById("reboundForm");
-    const GAS_URL = "https://script.google.com/macros/s/AKfycbzDu5o_EilirlyJjJvzOPaahbuVjXCsxLBXDXMGxjqpO-gdas6ExNWujUiUpTMUUqDe/exec";
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbwoji7yp7jgledr96aVMG7rKyVPAAdjlx89fuvlcWClnHOfvEHG511CimA-JODDIunS/exec";
 
     if (form) {
       form.addEventListener("submit", async (e) => {
@@ -959,7 +961,7 @@ Schools, homes, and community groups supporting the initiative.
             body: formData,
           });
 
-          document.getElementById("formSuccessMessage").style.display = "block";
+          alert("Thank you! Your details have been submitted.");
           form.reset();
           document.getElementById('popupOverlayJoin').style.display = 'none';
         } catch (err) {
