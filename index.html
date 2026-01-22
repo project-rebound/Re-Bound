@@ -958,6 +958,29 @@ A growing community of student volunteers, families, and partner institutions.
 
   <script>
     // ===== FINAL LOCKED COLLECTION CENTER LOGIC =====
+    // ===== AUTO-ADD REQUESTED COLLECTION CENTER =====
+    const centerInput = document.getElementById("newCenterInput");
+    const centerSelect = document.getElementById("collectionCenter");
+
+    if (centerInput && centerSelect) {
+      centerInput.addEventListener("blur", () => {
+        const value = centerInput.value.trim();
+        if (!value) return;
+
+        // Check if already exists
+        const exists = Array.from(centerSelect.options)
+          .some(opt => opt.value === value);
+
+        if (!exists) {
+          const newOpt = new Option(value, value);
+          // Insert before the request option (last one)
+          centerSelect.add(newOpt, centerSelect.options.length - 1);
+        }
+
+        centerSelect.value = value;
+      });
+    }
+
     document.addEventListener("DOMContentLoaded", () => {
       const select = document.getElementById("collectionCenter");
       const input = document.getElementById("newCenterInput");
@@ -1043,7 +1066,7 @@ A growing community of student volunteers, families, and partner institutions.
         formData.append("timestamp", new Date().toISOString());
 
         try {
-          await fetch(GAS_URL, {
+          fetch(GAS_URL, {
             method: "POST",
             mode: "no-cors",
             body: formData,
