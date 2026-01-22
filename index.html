@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,7 +7,6 @@
 </head>
 <body>
 
-<!-- Minimal form reproduction with HARD RESET logic -->
 <form id="reboundForm">
   <label>Collection Center</label>
   <select name="collectionCenter" id="collectionCenter" required>
@@ -31,17 +29,14 @@
 </form>
 
 <script>
-/* ===== ABSOLUTE OVERRIDE LOGIC ===== */
+const GAS_URL = "https://script.google.com/macros/s/AKfycbzDu5o_EilirlyJjJvzOPaahbuVjXCsxLBXDXMGxjqpO-gdas6ExNWujUiUpTMUUqDe/exec";
+
 document.addEventListener("DOMContentLoaded", () => {
   const select = document.getElementById("collectionCenter");
   const input = document.getElementById("newCenterInput");
 
-  // HARD RESET
-  while (select.options.length > 1) {
-    select.remove(1);
-  }
+  while (select.options.length > 1) select.remove(1);
 
-  // Add ONLY valid options
   select.add(new Option("Garadi Apartment, Basavanagudi", "Garadi Apartment, Basavanagudi"));
   select.add(new Option("➕ Request a new collection center", "__request_new__"));
 
@@ -53,9 +48,20 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
-/* ===== SUBMIT MOCK (UI CONFIRMATION) ===== */
-document.getElementById("reboundForm").addEventListener("submit", e => {
+document.getElementById("reboundForm").addEventListener("submit", async (e) => {
   e.preventDefault();
+
+  let center = collectionCenter.value;
+  if (center === "__request_new__") {
+    center = newCenterInput.value.trim();
+    if (!center) return alert("Please enter a collection center.");
+  }
+
+  const data = new FormData();
+  data.append("collectionCenter", center);
+
+  await fetch(GAS_URL, { method: "POST", mode: "no-cors", body: data });
+
   document.getElementById("formSuccessMessage").style.display = "block";
 });
 </script>
