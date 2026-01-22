@@ -621,7 +621,7 @@
         <div class="stat-card">
           <div class="stat-number">4</div>
           <div class="stat-label">Partner Schools</div>
-          <p style="font-size:0.78rem; margin-top:0.3rem;">Starting with </p>
+          <p style="font-size:0.78rem; margin-top:0.3rem;">Starting with Sri Kumaran Children’s Home campuses.</p>
         </div>
         <div class="stat-card">
           <div class="stat-number">1K+</div>
@@ -765,7 +765,8 @@
           </div>
           <div class="team-face team-back">
             <div class="team-detail">
-              A growing community of student volunteers, families, and partner institutions - with heartfelt gratitude to </div>
+              A growing community of student volunteers, families, and partner institutions - with heartfelt gratitude to Sri Kumaran Children’s Home for being the first to believe in and support the initiative - along with corporates and homes that collect notebooks, sort pages, help with binding, and join distribution visits. Together, they turn a simple idea into real notebooks in real children’s hands.
+            </div>
           </div>
         </div>
       </div>
@@ -812,13 +813,17 @@
         </div>
 
         <label class="popup-label">Collection Center</label>
-        <select name="collectionCenter" required>
-          <option value="">Select Collection Center</option>
-          <option value="</option>
-          <option value="</option>
-          <option value="</option>
-          <option value="</option>
-        </select>
+        <select name="collectionCenter" id="collectionCenter" required>
+  <option value="">Select Collection Center</option>
+</select>
+
+<input
+  type="text"
+  id="newCenterInput"
+  name="newCollectionCenter"
+  placeholder="Enter name & area of the collection center"
+  style="display:none; margin-top:0.6rem;"
+/>
 
         <button type="submit">Submit</button>
         <div class="popup-hint">
@@ -854,6 +859,39 @@
   </div>
 
   <script>
+    // ===== Dynamic Collection Centers (SOURCE OF TRUTH) =====
+    const collectionCenters = [
+      "Garadi Apartment, Basavanagudi"
+    ];
+
+    const centerSelect = document.getElementById("collectionCenter");
+    const newCenterInput = document.getElementById("newCenterInput");
+
+    if (centerSelect) {
+      collectionCenters.forEach(center => {
+        const option = document.createElement("option");
+        option.value = center;
+        option.textContent = center;
+        centerSelect.appendChild(option);
+      });
+
+      const requestOption = document.createElement("option");
+      requestOption.value = "__request_new__";
+      requestOption.textContent = "➕ Request a new collection center";
+      centerSelect.appendChild(requestOption);
+
+      centerSelect.addEventListener("change", () => {
+        if (centerSelect.value === "__request_new__") {
+          newCenterInput.style.display = "block";
+          newCenterInput.required = true;
+        } else {
+          newCenterInput.style.display = "none";
+          newCenterInput.required = false;
+          newCenterInput.value = "";
+        }
+      });
+    }
+
     // Back to top
     const backToTop = document.getElementById("backToTop");
     window.addEventListener("scroll", () => {
@@ -897,11 +935,19 @@
         }
 
         const interestType = choices.join(", ");
+        let collectionCenterFinal = form.collectionCenter.value;
+        if (collectionCenterFinal === "__request_new__") {
+          collectionCenterFinal = newCenterInput.value.trim();
+          if (!collectionCenterFinal) {
+            alert("Please enter the name of the requested collection center.");
+            return;
+          }
+        }
 
         const formData = new FormData();
         formData.append("name", name);
         formData.append("phone", phone);
-        formData.append("collectionCenter", collectionCenter);
+        formData.append("collectionCenter", collectionCenterFinal);
         formData.append("interestType", interestType);
         formData.append("timestamp", new Date().toISOString());
 
